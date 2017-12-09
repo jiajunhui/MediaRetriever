@@ -30,13 +30,13 @@ public class Utils {
 
     /**
      * Constant used to indicate the dimension of mini thumbnail.
-     * @hide Only used by media framework and media provider internally.
+     * Only used by media framework and media provider internally.
      */
     public static final int TARGET_SIZE_MINI_THUMBNAIL = 320;
 
     /**
      * Constant used to indicate the dimension of micro thumbnail.
-     * @hide Only used by media framework and media provider internally.
+     * Only used by media framework and media provider internally.
      */
     public static final int TARGET_SIZE_MICRO_THUMBNAIL = 96;
 

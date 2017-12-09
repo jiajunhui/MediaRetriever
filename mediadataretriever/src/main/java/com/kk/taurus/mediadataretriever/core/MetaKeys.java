@@ -5,155 +5,6 @@ package com.kk.taurus.mediadataretriever.core;
  */
 
 public interface MetaKeys {
-    
-    interface FFmpegKeys{
-        /**
-         * The metadata keyFFmpeg to retrieve the name of the set this work belongs to.
-         */
-        String METADATA_KEY_ALBUM = "album";
-        /**
-         * The metadata keyFFmpeg to retrieve the main creator of the set/album, if different
-         * from artist. e.g. "Various Artists" for compilation albums.
-         */
-        String METADATA_KEY_ALBUM_ARTIST = "album_artist";
-        /**
-         * The metadata keyFFmpeg to retrieve the main creator of the work.
-         */
-        String METADATA_KEY_ARTIST = "artist";
-        /**
-         * The metadata keyFFmpeg to retrieve the any additional description of the file.
-         */
-        String METADATA_KEY_COMMENT = "comment";
-        /**
-         * The metadata keyFFmpeg to retrieve the who composed the work, if different from artist.
-         */
-        String METADATA_KEY_COMPOSER = "composer";
-        /**
-         * The metadata keyFFmpeg to retrieve the name of copyright holder.
-         */
-        String METADATA_KEY_COPYRIGHT = "copyright";
-        /**
-         * The metadata keyFFmpeg to retrieve the date when the file was created, preferably in ISO 8601.
-         */
-        String METADATA_KEY_CREATION_TIME = "creation_time";
-        /**
-         * The metadata keyFFmpeg to retrieve the date when the work was created, preferably in ISO 8601.
-         */
-        String METADATA_KEY_DATE = "date";
-        /**
-         * The metadata keyFFmpeg to retrieve the number of a subset, e.g. disc in a multi-disc collection.
-         */
-        String METADATA_KEY_DISC = "disc";
-        /**
-         * The metadata keyFFmpeg to retrieve the name/settings of the software/hardware that produced the file.
-         */
-        String METADATA_KEY_ENCODER = "encoder";
-        /**
-         * The metadata keyFFmpeg to retrieve the person/group who created the file.
-         */
-        String METADATA_KEY_ENCODED_BY = "encoded_by";
-        /**
-         * The metadata keyFFmpeg to retrieve the original name of the file.
-         */
-        String METADATA_KEY_FILENAME = "filename";
-        /**
-         * The metadata keyFFmpeg to retrieve the genre of the work.
-         */
-        String METADATA_KEY_GENRE = "genre";
-        /**
-         * The metadata keyFFmpeg to retrieve the main language in which the work is performed, preferably
-         * in ISO 639-2 format. Multiple languages can be specified by separating them with commas.
-         */
-        String METADATA_KEY_LANGUAGE = "language";
-        /**
-         * The metadata keyFFmpeg to retrieve the artist who performed the work, if different from artist.
-         * E.g for "Also sprach Zarathustra", artist would be "Richard Strauss" and performer "London 
-         * Philharmonic Orchestra".
-         */
-        String METADATA_KEY_PERFORMER = "performer";
-        /**
-         * The metadata keyFFmpeg to retrieve the name of the label/publisher.
-         */
-        String METADATA_KEY_PUBLISHER = "publisher";
-        /**
-         * The metadata keyFFmpeg to retrieve the name of the service in broadcasting (channel name).
-         */
-        String METADATA_KEY_SERVICE_NAME = "service_name";
-        /**
-         * The metadata keyFFmpeg to retrieve the name of the service provider in broadcasting.
-         */
-        String METADATA_KEY_SERVICE_PROVIDER = "service_provider";
-        /**
-         * The metadata keyFFmpeg to retrieve the name of the work.
-         */
-        String METADATA_KEY_TITLE = "title";
-        /**
-         * The metadata keyFFmpeg to retrieve the number of this work in the set, can be in form current/total.
-         */
-        String METADATA_KEY_TRACK = "track";
-        /**
-         * The metadata keyFFmpeg to retrieve the total bitrate of the bitrate variant that the current stream
-         * is part of.
-         */
-        String METADATA_KEY_VARIANT_BITRATE = "bitrate";
-        /**
-         * The metadata keyFFmpeg to retrieve the duration of the work in milliseconds.
-         */
-        String METADATA_KEY_DURATION = "duration";
-        /**
-         * The metadata keyFFmpeg to retrieve the audio codec of the work.
-         */
-        String METADATA_KEY_AUDIO_CODEC = "audio_codec";
-        /**
-         * The metadata keyFFmpeg to retrieve the video codec of the work.
-         */
-        String METADATA_KEY_VIDEO_CODEC = "video_codec";
-        /**
-         * This keyFFmpeg retrieves the video rotation angle in degrees, if available.
-         * The video rotation angle may be 0, 90, 180, or 270 degrees.
-         */
-        String METADATA_KEY_VIDEO_ROTATION = "rotate";
-        /**
-         * The metadata keyFFmpeg to retrieve the main creator of the work.
-         */
-        String METADATA_KEY_ICY_METADATA = "icy_metadata";
-        /**
-         * The metadata keyFFmpeg to retrieve the main creator of the work.
-         */
-        //private static final String METADATA_KEY_ICY_ARTIST = "icy_artist";
-        /**
-         * The metadata keyFFmpeg to retrieve the name of the work.
-         */
-        //private static final String METADATA_KEY_ICY_TITLE = "icy_title";
-        /**
-         * This metadata keyFFmpeg retrieves the average framerate (in frames/sec), if available.
-         */
-        String METADATA_KEY_FRAMERATE = "framerate";
-        /**
-         * The metadata keyFFmpeg to retrieve the chapter start time in milliseconds.
-         */
-        String METADATA_KEY_CHAPTER_START_TIME = "chapter_start_time";
-        /**
-         * The metadata keyFFmpeg to retrieve the chapter end time in milliseconds.
-         */
-        String METADATA_KEY_CHAPTER_END_TIME = "chapter_end_time";
-        /**
-         * The metadata keyFFmpeg to retrieve the chapter count.
-         */
-        String METADATA_CHAPTER_COUNT = "chapter_count";
-        /**
-         * The metadata keyFFmpeg to retrieve the file size in bytes.
-         */
-        String METADATA_KEY_FILESIZE = "filesize";
-        /**
-         * The metadata keyFFmpeg to retrieve the video width.
-         */
-        String METADATA_KEY_VIDEO_WIDTH = "video_width";
-        /**
-         * The metadata keyFFmpeg to retrieve the video height.
-         */
-        String METADATA_KEY_VIDEO_HEIGHT = "video_height";
-    }
 
     interface SystemMetaKeys{
         /**
@@ -258,12 +109,12 @@ public interface MetaKeys {
          * This keyFFmpeg retrieves the language code of text tracks, if available.
          * If multiple text tracks present, the return value will look like:
          * "eng:chi"
-         * @hide
+         * 
          */
         int METADATA_KEY_TIMED_TEXT_LANGUAGES      = 21;
         /**
          * If this keyFFmpeg exists the media is drm-protected.
-         * @hide
+         * 
          */
         int METADATA_KEY_IS_DRM          = 22;
         /**

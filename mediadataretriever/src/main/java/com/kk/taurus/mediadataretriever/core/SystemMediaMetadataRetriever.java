@@ -57,7 +57,7 @@ public class SystemMediaMetadataRetriever implements IMediaMetadataRetriever {
 
     @Override
     public String extractMetadata(MetadataKey keyCode) {
-        return mMediaMetadataRetriever.extractMetadata(keyCode.keySystem);
+        return mMediaMetadataRetriever.extractMetadata(keyCode.keyInt);
     }
 
     @Override

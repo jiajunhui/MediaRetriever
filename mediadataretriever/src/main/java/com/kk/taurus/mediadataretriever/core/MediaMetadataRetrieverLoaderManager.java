@@ -19,10 +19,6 @@ import java.util.Map;
 public class MediaMetadataRetrieverLoaderManager {
 
     private final String TAG = "LoaderManager";
-    public static final int LOAD_MODE_SYSTEM_FIRST = 0;
-    public static final int LOAD_MODE_FFMPEG_FIRST = 1;
-
-    private int mLoadMode = LOAD_MODE_SYSTEM_FIRST;
 
     private MediaMetadataRetrieverLoaderManager(){}
 
@@ -39,10 +35,6 @@ public class MediaMetadataRetrieverLoaderManager {
         return instance;
     }
 
-    public void setLoadMode(int loadMode) {
-        this.mLoadMode = loadMode;
-    }
-
     private boolean isMetaHasData(Map<MetadataKey,String> metaData){
         return metaData!=null && metaData.size()>0;
     }
@@ -52,68 +44,11 @@ public class MediaMetadataRetrieverLoaderManager {
     }
 
     public MediaData getMediaData(MediaTask task, OnLoadListener onLoadListener){
-        MediaData result = null;
-        switch (mLoadMode){
-            case LOAD_MODE_FFMPEG_FIRST:
-                //第一次尝试加载
-                result = FFmpegLoadMediaData(task, onLoadListener);
-                //如果需要加载帧画面，且帧画面为空时，尝试第二次加载。
-                if(task.isLoadFrame() && result.getFrame()==null){
-                    //第二次加载前，需要判断MetaData是否已经拿到，如果拿到，第二次尝试时将不再加载MetaData
-                    if(task.isNeedLoadMetaData() && isMetaHasData(result.getMetaData())){
-                        task.setKeys(null);
-                    }
-                    //第二次尝试加载
-                    result = systemLoadMediaData(task, onLoadListener);
-                    return result;
-                }
-                //如果需要加载MetaData，且MetaData为空时，尝试第二次加载。
-                if(task.isNeedLoadMetaData() && !isMetaHasData(result.getMetaData())){
-                    //第二次加载前，需要判断帧画面是否已经拿到，如果拿到，第二次尝试时将不再加载帧画面
-                    if(task.isLoadFrame() && result.getFrame()!=null){
-                        task.setLoadFrame(false);
-                    }
-                    //第二次尝试加载
-                    result = systemLoadMediaData(task, onLoadListener);
-                    return result;
-                }
-
-            case LOAD_MODE_SYSTEM_FIRST:
-                //第一次尝试加载
-                result = systemLoadMediaData(task, onLoadListener);
-                //如果需要加载帧画面，且帧画面为空时，尝试第二次加载。
-                if(task.isLoadFrame() && result.getFrame()==null){
-                    //第二次加载前，需要判断MetaData是否已经拿到，如果拿到，第二次尝试时将不再加载MetaData
-                    if(task.isNeedLoadMetaData() && isMetaHasData(result.getMetaData())){
-                        task.setKeys(null);
-                    }
-                    //第二次尝试加载
-                    result = FFmpegLoadMediaData(task, onLoadListener);
-                    return result;
-                }
-                //如果需要加载MetaData，且MetaData为空时，尝试第二次加载。
-                if(task.isNeedLoadMetaData() && !isMetaHasData(result.getMetaData())){
-                    //第二次加载前，需要判断帧画面是否已经拿到，如果拿到，第二次尝试时将不再加载帧画面
-                    if(task.isLoadFrame() && result.getFrame()!=null){
-                        task.setLoadFrame(false);
-                    }
-                    //第二次尝试加载
-                    result = FFmpegLoadMediaData(task, onLoadListener);
-                    return result;
-                }
-        }
-        return result;
+        return systemLoadMediaData(task, onLoadListener);
     }
 
     private MediaData systemLoadMediaData(MediaTask task, OnLoadListener onLoadListener){
         IMediaMetadataRetriever mediaMetadataRetriever = new SystemMediaMetadataRetriever();
-        MediaData data = loadMediaData(mediaMetadataRetriever,task, onLoadListener);
-        mediaMetadataRetriever.release();
-        return data;
-    }
-
-    private MediaData FFmpegLoadMediaData(MediaTask task, OnLoadListener onLoadListener){
-        IMediaMetadataRetriever mediaMetadataRetriever = new FFMPEGMediaMetadataRetriever();
         MediaData data = loadMediaData(mediaMetadataRetriever,task, onLoadListener);
         mediaMetadataRetriever.release();
         return data;

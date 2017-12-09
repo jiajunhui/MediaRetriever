@@ -1,7 +1,6 @@
 package com.kk.taurus.mediadataretriever.cache;
 
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 
 /**
  * Created by Taurus on 2017/6/2.

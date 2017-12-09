@@ -26,6 +26,8 @@ public class LoadTask {
     private OnMediaRetrieverLoadListener onMediaRetrieverLoadListener;
     private long createTime;
 
+    private boolean needLoadFrame = true;
+
     public LoadTask(int sourceType, String dataSource, View targetView, int placeHolder, int errorHolder, long time, int option, int thumbnailType, MetadataKey[] keys, Map<String, String> headers, OnMediaRetrieverLoadListener onMediaRetrieverLoadListener) {
         this.sourceType = sourceType;
         this.dataSource = dataSource;
@@ -138,6 +140,14 @@ public class LoadTask {
 
     public void setCreateTime(long createTime) {
         this.createTime = createTime;
+    }
+
+    public boolean isNeedLoadFrame() {
+        return needLoadFrame;
+    }
+
+    public void setNeedLoadFrame(boolean needLoadFrame) {
+        this.needLoadFrame = needLoadFrame;
     }
 
     public Object getTag(){

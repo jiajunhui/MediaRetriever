@@ -39,7 +39,7 @@ public class CacheManager {
     }
 
     public Bitmap getLruCache(String key){
-        Log.d(TAG,"lru_size : " + mLruCacheManager.size());
+//        Log.d(TAG,"lru_size : " + mLruCacheManager.size());
         return mLruCacheManager.getCache(key);
     }
 

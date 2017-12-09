@@ -30,9 +30,9 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
     private Context mContext;
     private List<VideoItem> mVideoItems = new ArrayList<>();
 
-    private MetadataKey key_duration = new MetadataKey(MetaKeys.SystemMetaKeys.METADATA_KEY_DURATION,MetaKeys.FFmpegKeys.METADATA_KEY_DURATION,"时长");
-    private MetadataKey key_width = new MetadataKey(MetaKeys.SystemMetaKeys.METADATA_KEY_VIDEO_WIDTH,MetaKeys.FFmpegKeys.METADATA_KEY_VIDEO_WIDTH,"宽度");
-    private MetadataKey key_height = new MetadataKey(MetaKeys.SystemMetaKeys.METADATA_KEY_VIDEO_HEIGHT,MetaKeys.FFmpegKeys.METADATA_KEY_VIDEO_HEIGHT,"高度");
+    private MetadataKey key_duration = new MetadataKey(MetaKeys.SystemMetaKeys.METADATA_KEY_DURATION,"时长");
+    private MetadataKey key_width = new MetadataKey(MetaKeys.SystemMetaKeys.METADATA_KEY_VIDEO_WIDTH,"宽度");
+    private MetadataKey key_height = new MetadataKey(MetaKeys.SystemMetaKeys.METADATA_KEY_VIDEO_HEIGHT,"高度");
 
     private MetadataKey[] metadataKeys = new MetadataKey[]{
             key_duration,
@@ -55,25 +55,29 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
     @Override
     public void onBindViewHolder(final LocalVideoItemHolder holder, int position) {
         final VideoItem item = getItem(position);
-        MediaRetriever.withVideo(item.getPath()).thumbnailType(MediaRetriever.MINI_KIND).placeHolder(R.mipmap.ic_launcher).metaKeys(metadataKeys).into(holder.cover);
         Map<MetadataKey, String> cacheMeta = mMetaCache.get(item.getPath());
         holder.info.setText("");
+        boolean needLoadMeta = true;
         if(cacheMeta!=null){
             StringBuilder sb = getBuilderInfo(cacheMeta, item);
             holder.info.setText(sb.toString());
-        }else{
-            holder.info.setTag(item.getPath());
-            MediaRetriever.withVideo(item.getPath()).metaKeys(metadataKeys).into(new OnMediaRetrieverLoadCallback() {
-                @Override
-                public void onMetaDataGet(Map<MetadataKey, String> metaData) {
-                    mMetaCache.put(item.getPath(), (MetaDataHashMap) metaData);
-                    StringBuilder sb = getBuilderInfo(metaData, item);
-                    if(item.getPath().equals(holder.info.getTag())){
-                        holder.info.setText(sb.toString());
-                    }
-                }
-            });
+            needLoadMeta = false;
         }
+
+        holder.info.setTag(item.getPath());
+        MediaRetriever.withVideo(item.getPath())
+                .thumbnailType(MediaRetriever.MINI_KIND)
+                .placeHolder(R.mipmap.ic_launcher)
+                .metaKeys(needLoadMeta?metadataKeys:null).into(holder.cover, new OnMediaRetrieverLoadCallback() {
+            @Override
+            public void onMetaDataGet(Map<MetadataKey, String> metaData) {
+                mMetaCache.put(item.getPath(), (MetaDataHashMap) metaData);
+                StringBuilder sb = getBuilderInfo(metaData, item);
+                if(item.getPath().equals(holder.info.getTag())){
+                    holder.info.setText(sb.toString());
+                }
+            }
+        });
     }
 
     private StringBuilder getBuilderInfo(Map<MetadataKey, String> metaData, VideoItem item){
@@ -113,8 +117,8 @@ public class LocalVideoAdapter extends RecyclerView.Adapter<LocalVideoAdapter.Lo
 
         public LocalVideoItemHolder(View itemView) {
             super(itemView);
-            cover = itemView.findViewById(R.id.video_cover);
-            info = itemView.findViewById(R.id.tv_video_info);
+            cover = (ImageView) itemView.findViewById(R.id.video_cover);
+            info = (TextView) itemView.findViewById(R.id.tv_video_info);
         }
     }
 

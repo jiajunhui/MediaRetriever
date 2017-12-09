@@ -8,31 +8,31 @@ import android.text.TextUtils;
 
 public class MetadataKey {
 
-    public int keySystem;
-    public String keyFFmpeg;
+    public int keyInt;
+    public String keyString;
     public String desc;
 
-    public MetadataKey(int keySystem) {
-        this.keySystem = keySystem;
+    public MetadataKey(int keyInt) {
+        this.keyInt = keyInt;
     }
 
-    public MetadataKey(String keyFFmpeg) {
-        this.keyFFmpeg = keyFFmpeg;
+    public MetadataKey(String keyString) {
+        this.keyString = keyString;
     }
 
-    public MetadataKey(int keySystem, String desc) {
-        this.keySystem = keySystem;
+    public MetadataKey(int keyInt, String desc) {
+        this.keyInt = keyInt;
         this.desc = desc;
     }
 
-    public MetadataKey(String keyFFmpeg, String desc) {
-        this.keyFFmpeg = keyFFmpeg;
+    public MetadataKey(String keyString, String desc) {
+        this.keyString = keyString;
         this.desc = desc;
     }
 
-    public MetadataKey(int keySystem, String keyFFmpeg, String desc) {
-        this.keySystem = keySystem;
-        this.keyFFmpeg = keyFFmpeg;
+    public MetadataKey(int keyInt, String keyString, String desc) {
+        this.keyInt = keyInt;
+        this.keyString = keyString;
         this.desc = desc;
     }
 

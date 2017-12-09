@@ -77,14 +77,14 @@ public class MediaDataRetrieverTaskLoader {
     }
 
     private static void addQueue(LoadTask task){
-        mTaskQueue.addLast(task);
+        mTaskQueue.add(task);
     }
 
     private static void dispatchTaskLogic(LoadTask task){
         Bitmap lruCache = CacheManager.getInstance().getLruCache(task.getDataSource());
         if(lruCache!=null){
-            Log.d(TAG,"get data from LRU cache : " + task.getDataSource());
             callBackOnFrameGet(task,lruCache);
+            task.setNeedLoadFrame(false);
             if(!task.isNeedLoadMetaData()){
                 return;
             }
@@ -93,7 +93,7 @@ public class MediaDataRetrieverTaskLoader {
         notifyPollTask();
     }
 
-    private static void notifyLoad(final LoadTask task){
+    private static void notifyLoad(LoadTask task){
         //获得许可
         semaphoreAcquire();
         DefaultThreadManager.getInstance().execute(new TaskRunnable(task) {
@@ -106,27 +106,25 @@ public class MediaDataRetrieverTaskLoader {
 
                 final int thumbnailType = invokeTask.getThumbnailType();
 
-                Bitmap result = CacheManager.getInstance().getDiskCache(dataSource);
+                if(invokeTask.isNeedLoadFrame()){
 
-                //是否需要加载帧画面标记
-                boolean needLoadFrame = true;
+                    Bitmap result = CacheManager.getInstance().getDiskCache(dataSource);
 
-                if(result!=null){
-                    result = Utils.scaleBitmap(result,thumbnailType);
-                    callBackOnFrameGet(invokeTask,result);
-                    Log.d(TAG,"get data from DISK cache : " + dataSource);
-                    CacheManager.getInstance().putLruCache(dataSource, result);
-                    //从磁盘缓存拿到数据后，将帧画面加载标记为不要
-                    needLoadFrame = false;
+                    if(result!=null){
+                        result = Utils.scaleBitmap(result,thumbnailType);
+                        callBackOnFrameGet(invokeTask,result);
+                        CacheManager.getInstance().putLruCache(dataSource, result);
+                        //从磁盘缓存拿到数据后，将帧画面加载标记为不要
+                        invokeTask.setNeedLoadFrame(false);
+                    }
                 }
 
-                loadMediaData(invokeTask, needLoadFrame, new MediaMetadataRetrieverLoaderManager.OnLoadListener() {
+                loadMediaData(invokeTask, invokeTask.isNeedLoadFrame(), new MediaMetadataRetrieverLoaderManager.OnLoadListener() {
                     @Override
                     public void onFrameGet(Bitmap bitmap) {
                         if(bitmap!=null){
                             bitmap = Utils.scaleBitmap(bitmap,thumbnailType);
                             callBackOnFrameGet(invokeTask,bitmap);
-                            Log.d(TAG,"get frame data from load  : " + dataSource);
                             CacheManager.getInstance().putLruCache(dataSource, bitmap);
                             CacheManager.getInstance().putDiskCache(dataSource,bitmap);
                         }else{
@@ -174,6 +172,7 @@ public class MediaDataRetrieverTaskLoader {
     }
 
     private static void callBackOnFrameGet(final LoadTask invokeTask, final Bitmap bitmap) {
+        Log.d(TAG,"callback onFrame get : " + invokeTask.getDataSource());
         mCallBackHandler.post(new LoadSuccessFrameCallback(invokeTask,bitmap));
     }
 
@@ -214,12 +213,15 @@ public class MediaDataRetrieverTaskLoader {
         return mThreadSemaphore.availablePermits();
     }
 
-    private static void pollTask() {
+    private synchronized static void pollTask() {
         LoadTask task;
+        Log.d(TAG,"=====TaskQueue size = " + mTaskQueue.size());
         if(getAvailablePermits()<=0){
             task = mTaskQueue.pollLast();
+            Log.d(TAG,"---> TaskQueue poll <<LAST>>");
         }else{
             task = mTaskQueue.pollFirst();
+            Log.d(TAG,"---> TaskQueue poll <<FIRST>>");
         }
         if(task==null)
             return;

@@ -23,7 +23,7 @@ public class MediaRetriever {
     public static final int FULL_SCREEN_KIND = 2;
     public static final int MICRO_KIND = 3;
 
-    private static void init(SettingBuilder settingBuilder){
+    public static void init(SettingBuilder settingBuilder){
         CacheManager.getInstance().init(settingBuilder);
     }
 
